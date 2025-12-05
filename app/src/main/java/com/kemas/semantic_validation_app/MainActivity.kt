@@ -65,7 +65,7 @@ class  MainActivity : AppCompatActivity() {
 
                         return@withContext
                     }
-                   
+
                     // Semua valid
                     binding.tvResult.setTextColor(getColor(android.R.color.holo_green_dark))
                     binding.tvResult.text = "Semua data valid"
