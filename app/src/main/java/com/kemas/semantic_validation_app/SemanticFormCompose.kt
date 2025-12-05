@@ -61,9 +61,8 @@ fun SemanticValidationScreen(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
 
     // 2. Instance Validator (Disarankan disimpan di ViewModel, tapi di sini oke untuk demo)
-    val validator = remember {
-        SemanticValidator(apiKey = BuildConfig.GEMINI_KEY)
-    }
+    val validator = ValidatorContainer.validator
+
 
     Column(
         modifier = modifier.padding(16.dp),

@@ -20,9 +20,7 @@ class  MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val TAG = "RustSemantic"
 
-    private val validator by lazy {
-        SemanticValidator(BuildConfig.GEMINI_KEY)
-    }
+    private val validator = ValidatorContainer.validator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

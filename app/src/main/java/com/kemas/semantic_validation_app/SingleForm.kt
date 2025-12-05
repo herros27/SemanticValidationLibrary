@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 class SingleForm : AppCompatActivity() {
 
     private lateinit var binding: ActivitySingleFormBinding
-    private val validator = SemanticValidator(BuildConfig.GEMINI_KEY)
+    private val validator = ValidatorContainer.validator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
