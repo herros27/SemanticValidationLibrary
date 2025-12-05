@@ -23,4 +23,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "semantic_validation_app"
 include(":app")
-include(":semantic_library")
+//include(":semantic_library")

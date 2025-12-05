@@ -1,13 +1,13 @@
 package com.kemas.semantic
 
 data class Field(val label: String, val value: String)
-fun SemanticValidator.validateBatch(fields: List<Field>): Map<String, ResponseData> {
+fun SemanticValidator.validateBatch(fields: List<Field>, model: ModelSelector): Map<String, ResponseData> {
     val output = mutableMapOf<String, ResponseData>()
 
     for (field in fields) {
         val result = validateText(
             text = field.value,
-            model = ModelSelector.GEMINI_FLASH,
+            model = model,
             label = field.label
         )
 

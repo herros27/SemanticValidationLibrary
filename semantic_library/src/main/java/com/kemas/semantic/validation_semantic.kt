@@ -17,8 +17,6 @@ package com.kemas.semantic
 // compile the Rust component. The easiest way to ensure this is to bundle the Kotlin
 // helpers directly inline like we're doing here.
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.sun.jna.Library
 import com.sun.jna.IntegerType
 import com.sun.jna.Native
@@ -52,7 +50,7 @@ open class RustBuffer : Structure() {
     class ByValue: RustBuffer(), Structure.ByValue
     class ByReference: RustBuffer(), Structure.ByReference
 
-   internal fun setValue(other: RustBuffer) {
+    internal fun setValue(other: RustBuffer) {
         capacity = other.capacity
         len = other.len
         data = other.data
@@ -64,8 +62,8 @@ open class RustBuffer : Structure() {
             UniffiLib.ffi_validation_semantic_rustbuffer_alloc(size.toLong(), status)
         }.also {
             if(it.data == null) {
-               throw RuntimeException("RustBuffer.alloc() returned null data pointer (size=${size})")
-           }
+                throw RuntimeException("RustBuffer.alloc() returned null data pointer (size=${size})")
+            }
         }
 
         internal fun create(capacity: ULong, len: ULong, data: Pointer?): RustBuffer.ByValue {
@@ -160,11 +158,11 @@ public interface FfiConverter<KotlinType, FfiType> {
     fun liftFromRustBuffer(rbuf: RustBuffer.ByValue): KotlinType {
         val byteBuf = rbuf.asByteBuffer()!!
         try {
-           val item = read(byteBuf)
-           if (byteBuf.hasRemaining()) {
-               throw RuntimeException("junk remaining in buffer after lifting, something is very wrong!!")
-           }
-           return item
+            val item = read(byteBuf)
+            if (byteBuf.hasRemaining()) {
+                throw RuntimeException("junk remaining in buffer after lifting, something is very wrong!!")
+            }
+            return item
         } finally {
             RustBuffer.free(rbuf)
         }
@@ -307,7 +305,7 @@ internal inline fun<T, reified E: Throwable> uniffiTraitInterfaceCallWithError(
         }
     }
 }
-// Initial value and increment amount for handles. 
+// Initial value and increment amount for handles.
 // These ensure that Kotlin-generated handles always have the lowest bit set
 private const val UNIFFI_HANDLEMAP_INITIAL = 1.toLong()
 private const val UNIFFI_HANDLEMAP_DELTA = 2.toLong()
@@ -317,7 +315,7 @@ private const val UNIFFI_HANDLEMAP_DELTA = 2.toLong()
 // This is used pass an opaque 64-bit handle representing a foreign object to the Rust code.
 internal class UniffiHandleMap<T: Any> {
     private val map = ConcurrentHashMap<Long, T>()
-    // Start 
+    // Start
     private val counter = java.util.concurrent.atomic.AtomicLong(UNIFFI_HANDLEMAP_INITIAL)
 
     val size: Int
@@ -370,7 +368,7 @@ internal interface UniffiCallbackInterfaceFree : com.sun.jna.Callback {
 }
 internal interface UniffiCallbackInterfaceClone : com.sun.jna.Callback {
     fun callback(`handle`: Long,)
-    : Long
+            : Long
 }
 @Structure.FieldOrder("handle", "free")
 internal open class UniffiForeignFutureDroppedCallbackStruct(
@@ -382,7 +380,7 @@ internal open class UniffiForeignFutureDroppedCallbackStruct(
         `free`: UniffiForeignFutureDroppedCallback? = null,
     ): UniffiForeignFutureDroppedCallbackStruct(`handle`,`free`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureDroppedCallbackStruct) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureDroppedCallbackStruct) {
         `handle` = other.`handle`
         `free` = other.`free`
     }
@@ -398,7 +396,7 @@ internal open class UniffiForeignFutureResultU8(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultU8(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultU8) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultU8) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -417,7 +415,7 @@ internal open class UniffiForeignFutureResultI8(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultI8(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultI8) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultI8) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -436,7 +434,7 @@ internal open class UniffiForeignFutureResultU16(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultU16(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultU16) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultU16) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -455,7 +453,7 @@ internal open class UniffiForeignFutureResultI16(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultI16(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultI16) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultI16) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -474,7 +472,7 @@ internal open class UniffiForeignFutureResultU32(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultU32(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultU32) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultU32) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -493,7 +491,7 @@ internal open class UniffiForeignFutureResultI32(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultI32(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultI32) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultI32) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -512,7 +510,7 @@ internal open class UniffiForeignFutureResultU64(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultU64(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultU64) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultU64) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -531,7 +529,7 @@ internal open class UniffiForeignFutureResultI64(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultI64(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultI64) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultI64) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -550,7 +548,7 @@ internal open class UniffiForeignFutureResultF32(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultF32(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultF32) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultF32) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -569,7 +567,7 @@ internal open class UniffiForeignFutureResultF64(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultF64(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultF64) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultF64) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -588,7 +586,7 @@ internal open class UniffiForeignFutureResultRustBuffer(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultRustBuffer(`returnValue`,`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultRustBuffer) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultRustBuffer) {
         `returnValue` = other.`returnValue`
         `callStatus` = other.`callStatus`
     }
@@ -605,7 +603,7 @@ internal open class UniffiForeignFutureResultVoid(
         `callStatus`: UniffiRustCallStatus.ByValue = UniffiRustCallStatus.ByValue(),
     ): UniffiForeignFutureResultVoid(`callStatus`,), Structure.ByValue
 
-   internal fun uniffiSetValue(other: UniffiForeignFutureResultVoid) {
+    internal fun uniffiSetValue(other: UniffiForeignFutureResultVoid) {
         `callStatus` = other.`callStatus`
     }
 
@@ -642,37 +640,37 @@ internal object IntegrityCheckingUniffiLib {
     ): Short
     external fun ffi_validation_semantic_uniffi_contract_version(
     ): Int
-    
-        
+
+
 }
 
 internal object UniffiLib {
-    
+
     // The Cleaner for the whole library
     internal val CLEANER: UniffiCleaner by lazy {
         UniffiCleaner.create()
     }
-    
+
 
     init {
         Native.register(UniffiLib::class.java, findLibraryName(componentName = "validation_semantic"))
-        
+
     }
-    external fun uniffi_validation_semantic_fn_clone_semanticvalidator(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_validation_semantic_fn_clone_semanticvalidator(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Long
-    external fun uniffi_validation_semantic_fn_free_semanticvalidator(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_validation_semantic_fn_free_semanticvalidator(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Unit
-    external fun uniffi_validation_semantic_fn_constructor_semanticvalidator_new(`apiKey`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_validation_semantic_fn_constructor_semanticvalidator_new(`apiKey`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus,
     ): Long
-    external fun uniffi_validation_semantic_fn_method_semanticvalidator_validate_text(`ptr`: Long,`text`: RustBuffer.ByValue,`model`: RustBuffer.ByValue,`label`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_validation_semantic_fn_method_semanticvalidator_validate_text(`ptr`: Long,`text`: RustBuffer.ByValue,`model`: RustBuffer.ByValue,`label`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus,
     ): RustBuffer.ByValue
-    external fun ffi_validation_semantic_rustbuffer_alloc(`size`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rustbuffer_alloc(`size`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): RustBuffer.ByValue
-    external fun ffi_validation_semantic_rustbuffer_from_bytes(`bytes`: ForeignBytes.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rustbuffer_from_bytes(`bytes`: ForeignBytes.ByValue,uniffi_out_err: UniffiRustCallStatus,
     ): RustBuffer.ByValue
-    external fun ffi_validation_semantic_rustbuffer_free(`buf`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rustbuffer_free(`buf`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus,
     ): Unit
-    external fun ffi_validation_semantic_rustbuffer_reserve(`buf`: RustBuffer.ByValue,`additional`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rustbuffer_reserve(`buf`: RustBuffer.ByValue,`additional`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): RustBuffer.ByValue
     external fun ffi_validation_semantic_rust_future_poll_u8(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -680,7 +678,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_u8(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_u8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_u8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Byte
     external fun ffi_validation_semantic_rust_future_poll_i8(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -688,7 +686,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_i8(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_i8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_i8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Byte
     external fun ffi_validation_semantic_rust_future_poll_u16(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -696,7 +694,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_u16(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_u16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_u16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Short
     external fun ffi_validation_semantic_rust_future_poll_i16(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -704,7 +702,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_i16(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_i16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_i16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Short
     external fun ffi_validation_semantic_rust_future_poll_u32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -712,7 +710,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_u32(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_u32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_u32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Int
     external fun ffi_validation_semantic_rust_future_poll_i32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -720,7 +718,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_i32(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_i32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_i32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Int
     external fun ffi_validation_semantic_rust_future_poll_u64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -728,7 +726,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_u64(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_u64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_u64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Long
     external fun ffi_validation_semantic_rust_future_poll_i64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -736,7 +734,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_i64(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_i64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_i64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Long
     external fun ffi_validation_semantic_rust_future_poll_f32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -744,7 +742,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_f32(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_f32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_f32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Float
     external fun ffi_validation_semantic_rust_future_poll_f64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -752,7 +750,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_f64(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_f64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_f64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Double
     external fun ffi_validation_semantic_rust_future_poll_rust_buffer(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -760,7 +758,7 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_rust_buffer(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_rust_buffer(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_rust_buffer(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): RustBuffer.ByValue
     external fun ffi_validation_semantic_rust_future_poll_void(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
@@ -768,10 +766,10 @@ internal object UniffiLib {
     ): Unit
     external fun ffi_validation_semantic_rust_future_free_void(`handle`: Long,
     ): Unit
-    external fun ffi_validation_semantic_rust_future_complete_void(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_validation_semantic_rust_future_complete_void(`handle`: Long,uniffi_out_err: UniffiRustCallStatus,
     ): Unit
-    
-        
+
+
 }
 
 private fun uniffiCheckContractApiVersion(lib: IntegrityCheckingUniffiLib) {
@@ -866,7 +864,7 @@ inline fun <T : Disposable?, R> T.use(block: (T) -> R) =
         }
     }
 
-/** 
+/**
  * Placeholder object used to signal that we're constructing an interface with a FFI handle.
  *
  * This is the first argument for interface constructors that input a raw handle. It exists is that
@@ -877,7 +875,7 @@ inline fun <T : Disposable?, R> T.use(block: (T) -> R) =
  * */
 object UniffiWithHandle
 
-/** 
+/**
  * Used to instantiate an interface without an actual pointer, for fakes in tests, mostly.
  *
  * @suppress
@@ -945,7 +943,6 @@ private class JavaLangRefCleaner : UniffiCleaner {
 private class JavaLangRefCleanable(
     val cleanable: java.lang.ref.Cleaner.Cleanable
 ) : UniffiCleaner.Cleanable {
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun clean() = cleanable.clean()
 }
 
@@ -1127,9 +1124,9 @@ public object FfiConverterString: FfiConverter<String, RustBuffer.ByValue> {
 
 //
 public interface SemanticValidatorInterface {
-    
+
     fun `validateText`(`text`: kotlin.String, `model`: ModelSelector, `label`: kotlin.String): ResponseData
-    
+
     companion object
 }
 
@@ -1137,9 +1134,9 @@ open class SemanticValidator: Disposable, AutoCloseable, SemanticValidatorInterf
 {
 
     @Suppress("UNUSED_PARAMETER")
-    /**
-     * @suppress
-     */
+            /**
+             * @suppress
+             */
     constructor(withHandle: UniffiWithHandle, handle: Long) {
         this.handle = handle
         this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(handle))
@@ -1158,13 +1155,13 @@ open class SemanticValidator: Disposable, AutoCloseable, SemanticValidatorInterf
         this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(handle))
     }
     constructor(`apiKey`: kotlin.String) :
-        this(UniffiWithHandle, 
-    uniffiRustCall() { _status ->
-    UniffiLib.uniffi_validation_semantic_fn_constructor_semanticvalidator_new(
-    
-        FfiConverterString.lower(`apiKey`),_status)
-}
-    )
+            this(UniffiWithHandle,
+                uniffiRustCall() { _status ->
+                    UniffiLib.uniffi_validation_semantic_fn_constructor_semanticvalidator_new(
+
+                        FfiConverterString.lower(`apiKey`),_status)
+                }
+            )
 
     protected val handle: Long
     protected val cleanable: UniffiCleaner.Cleanable
@@ -1237,32 +1234,32 @@ open class SemanticValidator: Disposable, AutoCloseable, SemanticValidatorInterf
         }
     }
 
-    
+
     @Throws(AppException::class)override fun `validateText`(`text`: kotlin.String, `model`: ModelSelector, `label`: kotlin.String): ResponseData {
-            return FfiConverterTypeResponseData.lift(
-    callWithHandle {
-    uniffiRustCallWithError(AppException) { _status ->
-    UniffiLib.uniffi_validation_semantic_fn_method_semanticvalidator_validate_text(
-        it,
-        FfiConverterString.lower(`text`),FfiConverterTypeModelSelector.lower(`model`),FfiConverterString.lower(`label`),_status)
-}
+        return FfiConverterTypeResponseData.lift(
+            callWithHandle {
+                uniffiRustCallWithError(AppException) { _status ->
+                    UniffiLib.uniffi_validation_semantic_fn_method_semanticvalidator_validate_text(
+                        it,
+                        FfiConverterString.lower(`text`),FfiConverterTypeModelSelector.lower(`model`),FfiConverterString.lower(`label`),_status)
+                }
+            }
+        )
     }
-    )
-    }
-    
-
-    
-
-    
 
 
-    
-    
+
+
+
+
+
+
+
     /**
      * @suppress
      */
     companion object
-    
+
 }
 
 
@@ -1293,13 +1290,13 @@ public object FfiConverterTypeSemanticValidator: FfiConverter<SemanticValidator,
 
 data class ResponseData (
     var `valid`: kotlin.Boolean
-    , 
+    ,
     var `message`: kotlin.String
-    
-){
-    
 
-    
+){
+
+
+
     companion object
 }
 
@@ -1316,12 +1313,12 @@ public object FfiConverterTypeResponseData: FfiConverterRustBuffer<ResponseData>
 
     override fun allocationSize(value: ResponseData) = (
             FfiConverterBoolean.allocationSize(value.`valid`) +
-            FfiConverterString.allocationSize(value.`message`)
-    )
+                    FfiConverterString.allocationSize(value.`message`)
+            )
 
     override fun write(value: ResponseData, buf: ByteBuffer) {
-            FfiConverterBoolean.write(value.`valid`, buf)
-            FfiConverterString.write(value.`message`, buf)
+        FfiConverterBoolean.write(value.`valid`, buf)
+        FfiConverterString.write(value.`message`, buf)
     }
 }
 
@@ -1330,21 +1327,21 @@ public object FfiConverterTypeResponseData: FfiConverterRustBuffer<ResponseData>
 
 
 sealed class AppException: kotlin.Exception() {
-    
+
     class Generic(
-        
+
         val `msg`: kotlin.String
-        ) : AppException() {
+    ) : AppException() {
         override val message
             get() = "msg=${ `msg` }"
     }
-    
+
 
     companion object ErrorHandler : UniffiRustCallStatusErrorHandler<AppException> {
         override fun lift(error_buf: RustBuffer.ByValue): AppException = FfiConverterTypeAppError.lift(error_buf)
     }
 
-    
+
 }
 
 /**
@@ -1352,12 +1349,12 @@ sealed class AppException: kotlin.Exception() {
  */
 public object FfiConverterTypeAppError : FfiConverterRustBuffer<AppException> {
     override fun read(buf: ByteBuffer): AppException {
-        
+
 
         return when(buf.getInt()) {
             1 -> AppException.Generic(
                 FfiConverterString.read(buf),
-                )
+            )
             else -> throw RuntimeException("invalid error enum value, something is very wrong!!")
         }
     }
@@ -1365,10 +1362,10 @@ public object FfiConverterTypeAppError : FfiConverterRustBuffer<AppException> {
     override fun allocationSize(value: AppException): ULong {
         return when(value) {
             is AppException.Generic -> (
-                // Add the size for the Int that specifies the variant plus the size needed for all fields
-                4UL
-                + FfiConverterString.allocationSize(value.`msg`)
-            )
+                    // Add the size for the Int that specifies the variant plus the size needed for all fields
+                    4UL
+                            + FfiConverterString.allocationSize(value.`msg`)
+                    )
         }
     }
 
@@ -1388,7 +1385,7 @@ public object FfiConverterTypeAppError : FfiConverterRustBuffer<AppException> {
 
 
 enum class ModelSelector {
-    
+
     GEMINI_FLASH,
     GEMINI_FLASH_LITE,
     GEMINI_FLASH_LATEST,

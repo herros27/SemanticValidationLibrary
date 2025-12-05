@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">semantic_validation_app</string>
+    <string name="title_activity_semantic_form_compose">SemanticFormCompose</string>
 </resources>

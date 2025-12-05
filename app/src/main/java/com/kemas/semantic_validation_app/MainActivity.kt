@@ -1,5 +1,6 @@
 package com.kemas.semantic_validation_app
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log // Import Log agar lebih rapi di Logcat
 import android.view.View
@@ -28,7 +29,16 @@ class  MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.btnSubmit.setOnClickListener { submitBiodata() }
+        binding.btnPindah.setOnClickListener {
+            val intent = Intent(this, SingleForm::class.java)
+            startActivity(intent)
+        }
+        binding.btnPindahCompose.setOnClickListener {
+            val intent = Intent(this, SemanticFormCompose::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun submitBiodata() {
@@ -47,7 +57,7 @@ class  MainActivity : AppCompatActivity() {
             try {
 
                 // 🟩 Hanya satu kali panggilan batch
-                val results = validator.validateBatch(fields)
+                val results = validator.validateBatch(fields, ModelSelector.GEMINI_FLASH)
 
                 withContext(Dispatchers.Main) {
                     binding.progressBar.visibility = View.GONE

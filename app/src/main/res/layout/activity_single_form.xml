@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SingleForm">
+
+    <!-- Input -->
+    <EditText
+        android:id="@+id/etInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Masukkan teks panjang..."
+        android:padding="12dp"
+        android:gravity="top|start"
+        android:background="@android:drawable/edit_text"
+        android:inputType="textMultiLine"
+        android:minLines="4"
+        android:maxLines="10"
+        android:scrollbars="vertical"
+        android:overScrollMode="always"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
+
+    <!-- Tombol Validasi -->
+    <Button
+        android:id="@+id/btnValidate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Validasi"
+        app:layout_constraintTop_toBottomOf="@id/etInput"
+        app:layout_constraintStart_toStartOf="@id/etInput"
+        app:layout_constraintEnd_toEndOf="@id/etInput"
+        android:layout_marginTop="16dp" />
+
+    <!-- Hasil Validasi -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/btnValidate"
+        app:layout_constraintStart_toStartOf="@id/btnValidate"
+        app:layout_constraintEnd_toEndOf="@id/btnValidate"
+        android:layout_marginTop="16dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
