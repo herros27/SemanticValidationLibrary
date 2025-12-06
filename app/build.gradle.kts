@@ -84,6 +84,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 //    implementation(project(":semantic_library"))
-    implementation("com.kemas:semantic-library:1.0.0")
+    implementation("io.github.herros27:semantic-library:1.0.0")
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
