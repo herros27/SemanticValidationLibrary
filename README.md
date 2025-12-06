@@ -1,16 +1,17 @@
 # 📚 Semantic Validation Android Library
 
 An Android library for performing **AI-powered text validation** using Gemini/Gemma models.
-Supports **single-field validation** and **batch validation** for multiple inputs at once.
+Supports **single-field validation**, **batch validation**, and **Jetpack Compose UI usage**.
 
 ---
 
 ## ✨ Features
 
 * ✔ Intelligent text validation using LLM
-* ✔ Supports multiple models ( `GEMINI_FLASH`, `GEMINI_FLASH_LATEST`, `GEMINI_FLASH_LITE`, `GEMMA`)
+* ✔ Supports multiple models (`GEMINI_FLASH`, `GEMINI_FLASH_LATEST`, `GEMINI_FLASH_LITE`, `GEMMA`)
 * ✔ Single text validation
 * ✔ Batch validation (validate multiple fields in one request)
+* ✔ Jetpack Compose support
 * ✔ Simple & developer-friendly API
 
 ---
@@ -58,7 +59,7 @@ android {
 Create `ValidatorContainer.kt`:
 
 ```kotlin
-import your.name.package.SemanticValidator
+import com.kemas.semantic.SemanticValidator
 
 object ValidatorContainer {
     val validator by lazy { SemanticValidator(BuildConfig.GEMINI_KEY) }
@@ -87,7 +88,6 @@ import com.kemas.semantic.SemanticValidator
 val validator = ValidatorContainer.validator
 
 private fun validateInput() {
-    
 
     val input = binding.etInput.text.toString().trim()
 
@@ -100,7 +100,7 @@ private fun validateInput() {
             val result = validator.validateText(
                 input,
                 ModelSelector.GEMMA,     // Select validation model
-                "cerita"                  // Validation context or rules
+                "cerita"                 // Validation rules/context
             )
 
             withContext(Dispatchers.Main) {
@@ -132,7 +132,7 @@ private fun validateInput() {
 
 # 2️⃣ Batch Validation (Multiple Fields)
 
-Validate multiple fields at once using `validateBatch()`.
+Validate multiple fields in a single call using `validateBatch()`.
 
 ```kotlin
 import com.kemas.semantic.validateBatch
@@ -151,7 +151,6 @@ private fun submitBiodata() {
 
     lifecycleScope.launch(Dispatchers.IO) {
         try {
-            // 🟩 One single batch validation call
             val results = validator.validateBatch(fields, ModelSelector.GEMINI_FLASH)
 
             withContext(Dispatchers.Main) {
@@ -187,18 +186,103 @@ private fun submitBiodata() {
 
 ---
 
+# 🌟 3️⃣ Jetpack Compose Example
+
+Below is an example implementation using **Jetpack Compose** with coroutine handling, state management, and Card status UI.
+
+```kotlin
+@Composable
+fun semanticValidationScreen(modifier: Modifier = Modifier) {
+
+    var inputText by remember { mutableStateOf("") }
+    var resultMessage by remember { mutableStateOf("No result yet") }
+    var isValid by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+
+    val scope = rememberCoroutineScope()
+
+    // Validator instance (Recommended to store in ViewModel)
+    val validator = ValidatorContainer.validator
+
+    Column(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text(
+            text = "Semantic Validator (Compose Example)",
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        TextField(
+            value = inputText,
+            onValueChange = { inputText = it },
+            label = { Text("Enter your text") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                enabled = !isLoading,
+                onClick = {
+                    scope.launch {
+                        isLoading = true
+
+                        try {
+                            val response = withContext(Dispatchers.IO) {
+                                validator.validateText(
+                                    text = inputText,
+                                    model = ModelSelector.GEMINI_FLASH,
+                                    label = "alamat"
+                                )
+                            }
+
+                            isValid = response.valid
+                            resultMessage = response.message
+
+                        } catch (e: Exception) {
+                            resultMessage = "Error: ${e.message}"
+                        } finally {
+                            isLoading = false
+                        }
+                    }
+                }
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                } else {
+                    Text("Validate Now")
+                }
+            }
+        }
+
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = if (isValid)
+                    MaterialTheme.colorScheme.primaryContainer
+                else
+                    MaterialTheme.colorScheme.errorContainer
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = resultMessage,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+    }
+}
+```
+
+---
+
 ## 🧪 Sample Output (Single Validation)
 
 ```
 ✔ Valid:
 This is a story about a young boy...
-```
-
-or:
-
-```
-❌ Error:
-Input does not match the expected story criteria.
 ```
 
 ---
@@ -211,12 +295,6 @@ Input does not match the expected story criteria.
 
 • Age is invalid:
   Age must be a number.
-```
-
-When everything is correct:
-
-```
-All fields are valid
 ```
 
 ---
@@ -233,4 +311,4 @@ Pull Requests are welcome for:
 
 ## 📄 License
 
-MIT License – free to use for personal or commercial projects.
+MIT License — free to use for personal or commercial projects.
